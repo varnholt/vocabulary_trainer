@@ -2,7 +2,8 @@
 
 A simple CSV file based vocabulary trainer for the PC
 
-<img src="doc/screenshot_1.png" width="75%"><br><br>
+<img src="doc/screenshot_1.png" width="75%"><br>
+<img src="doc/screenshot_2.png" width="75%"><br>
 
 # Usage
 Just place CSV files into the application folder and run it.
