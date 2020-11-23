@@ -131,7 +131,7 @@ QPushButton:hover
            </font>
           </property>
           <property name="text">
-           <string>I know it!😀</string>
+           <string>I know it! 😀</string>
           </property>
          </widget>
         </item>
