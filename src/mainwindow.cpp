@@ -12,7 +12,112 @@ MainWindow::MainWindow(QWidget *parent)
    ui->setupUi(this);
    ui->statusbar->hide();
    ui->menubar->hide();
-   // setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+
+   auto css = R"(
+   QMainWindow
+   {
+      border: 1px solid white
+   }
+
+   QWidget
+   {
+      background-color: #333333;
+   }
+
+   QListWidget
+   {
+      color: #888888;
+   }
+
+   QCheckBox
+   {
+      color: #888888;
+      background-color: #444444;
+      font-weight: bold;
+      border: none;
+      padding: 5px;
+   }
+
+   QCheckBox:active
+   {
+      color: #1d90cd;
+   }
+
+   QCheckBox:hover
+   {
+      background-color: #505050;
+   }
+
+   QLabel
+   {
+      color: #888888;
+      background-color: #444444;
+      font-weight: bold;
+   }
+
+   QLabel:active
+   {
+      color: #1d90cd;
+   }
+
+   QPushButton
+   {
+      color: #888888;
+      background-color: #444444;
+      font-weight: bold;
+      border: none;
+      padding: 5px;
+   }
+
+   QPushButton:active
+   {
+      color: #ffffff;
+   }
+
+   QPushButton:hover
+   {
+      color: #1d90cd;
+      background-color: #505050;
+   }
+   )";
+
+   setStyleSheet(css);
+
+   setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+
+   connect(
+      ui->_close,
+      &QPushButton::clicked,
+      qApp,
+      &QApplication::exit
+   );
+
+   connect(
+      ui->_maximize,
+      &QPushButton::clicked,
+      this,
+      [this]()
+      {
+         if (isMaximized())
+         {
+            showNormal();
+            ui->_maximize->setText("☐");
+         }
+         else
+         {
+            showMaximized();
+            ui->_maximize->setText("🗗");
+         }
+      }
+   );
+
+   connect(
+      ui->_minimize,
+      &QPushButton::clicked,
+      this,
+      &MainWindow::showMinimized
+   );
+
 
    setFocusPolicy(Qt::StrongFocus);
 
@@ -172,3 +277,20 @@ void MainWindow::flip()
 
    ui->_word->setText(QString::fromStdString(translation).trimmed());
 }
+
+
+void MainWindow::mousePressEvent(QMouseEvent* event)
+{
+  _mouse_pos[0] = event->position().x();
+  _mouse_pos[1] = event->position().y();
+}
+
+
+void MainWindow::mouseMoveEvent(QMouseEvent* event)
+{
+   move(
+      event->globalPosition().x() - _mouse_pos[0],
+      event->globalPosition().y() - _mouse_pos[1]
+   );
+}
+

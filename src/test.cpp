@@ -106,7 +106,13 @@ bool Test::next()
       return false;
    }
 
-   // pick a random bad one
-   _current = bad_ones[(std::rand() % bad_ones.size())];
+   // pick a random bad one, but not the same one again
+   auto next = 0;
+   do {
+      next = bad_ones[(std::rand() % bad_ones.size())];
+   }
+   while (_current == next && bad_ones.size() > 1);
+
+   _current = next;
    return true;
 }

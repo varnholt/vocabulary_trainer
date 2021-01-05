@@ -19,6 +19,9 @@ class MainWindow : public QMainWindow
    protected:
        bool eventFilter(QObject *obj, QEvent *event) override;
 
+       void mousePressEvent(QMouseEvent* event) override;
+       void mouseMoveEvent(QMouseEvent* event) override;
+
    private:
       void showNext();
       void showMenu();
@@ -30,4 +33,5 @@ class MainWindow : public QMainWindow
       void flip();
 
       bool _flipped = false;
+      std::array<int32_t, 2> _mouse_pos;
 };
