@@ -5,20 +5,32 @@
 #include <QKeyEvent>
 
 
-MainWindow::MainWindow(QWidget *parent)
-   : QMainWindow(parent)
-   , ui(new Ui::MainWindow)
+namespace
 {
-   ui->setupUi(this);
-   ui->statusbar->hide();
-   ui->menubar->hide();
 
-   auto css = R"(
-   QMainWindow
+constexpr auto title_label_css = R"(
+   QLabel
    {
-      border: 1px solid white
+      color: #cccccc;
+      background-color: #333333;
+   }
+)";
+
+constexpr auto title_buttons_css = R"(
+   QPushButton
+   {
+      color: #ffffff;
+      background-color: #333333;
+      font-weight: normal;
    }
 
+   QPushButton:hover
+   {
+      background-color: #444444;
+   }
+)";
+
+constexpr auto main_css = R"(
    QWidget
    {
       background-color: #333333;
@@ -79,9 +91,23 @@ MainWindow::MainWindow(QWidget *parent)
       color: #1d90cd;
       background-color: #505050;
    }
-   )";
+)";
 
-   setStyleSheet(css);
+}
+
+MainWindow::MainWindow(QWidget *parent)
+   : QMainWindow(parent)
+   , ui(new Ui::MainWindow)
+{
+   ui->setupUi(this);
+   ui->statusbar->hide();
+   ui->menubar->hide();
+
+   ui->_title->setStyleSheet(title_label_css);
+   ui->_close->setStyleSheet(title_buttons_css);
+   ui->_maximize->setStyleSheet(title_buttons_css);
+   ui->_minimize->setStyleSheet(title_buttons_css);
+   setStyleSheet(main_css);
 
    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 

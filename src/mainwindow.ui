@@ -16,7 +16,10 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QFrame" name="centralwidget">
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -169,12 +172,7 @@
        <item>
         <widget class="QLabel" name="_title">
          <property name="styleSheet">
-          <string notr="true">QLabel
-{
-   color: #cccccc;
-   background-color: #333333;
-}
-</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>All The Vocabulary!</string>
@@ -209,18 +207,7 @@
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton
-{
-   color: #ffffff;
-   background-color: #333333;
-   font-weight: normal;
-}
-
-QPushButton:hover
-{
-   background-color: #444444;
-}
-</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>—</string>
@@ -255,18 +242,7 @@ QPushButton:hover
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton
-{
-   color: #ffffff;
-   background-color: #333333;
-   font-weight: normal;
-}
-
-QPushButton:hover
-{
-   background-color: #444444;
-}
-</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>☐</string>
@@ -301,18 +277,7 @@ QPushButton:hover
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton
-{
-   color: #ffffff;
-   background-color: #333333;
-   font-weight: normal;
-}
-
-QPushButton:hover
-{
-   background-color: #444444;
-}
-</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>✕</string>
