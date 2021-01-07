@@ -122,19 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
       ui->_maximize,
       &QPushButton::clicked,
       this,
-      [this]()
-      {
-         if (isMaximized())
-         {
-            showNormal();
-            ui->_maximize->setText("☐");
-         }
-         else
-         {
-            showMaximized();
-            ui->_maximize->setText("🗗");
-         }
-      }
+      &MainWindow::toggleMaximize
    );
 
    connect(
@@ -235,6 +223,7 @@ bool MainWindow::eventFilter(QObject* /*obj*/, QEvent *event)
          return true;
       }
    }
+
    return false;
 }
 
@@ -305,10 +294,31 @@ void MainWindow::flip()
 }
 
 
+void MainWindow::toggleMaximize()
+{
+   if (isMaximized())
+   {
+      showNormal();
+      ui->_maximize->setText("☐");
+   }
+   else
+   {
+      showMaximized();
+      ui->_maximize->setText("🗗");
+   }
+}
+
+
 void MainWindow::mousePressEvent(QMouseEvent* event)
 {
   _mouse_pos[0] = event->position().x();
   _mouse_pos[1] = event->position().y();
+}
+
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent* /*event*/)
+{
+   toggleMaximize();
 }
 
 

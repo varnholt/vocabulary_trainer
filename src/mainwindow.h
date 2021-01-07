@@ -20,18 +20,23 @@ class MainWindow : public QMainWindow
        bool eventFilter(QObject *obj, QEvent *event) override;
 
        void mousePressEvent(QMouseEvent* event) override;
+       void mouseDoubleClickEvent(QMouseEvent* event) override;
        void mouseMoveEvent(QMouseEvent* event) override;
+
+   private slots:
+       void toggleMaximize();
 
    private:
       void showNext();
       void showMenu();
       void initMenu();
-      Ui::MainWindow* ui;
-      Test _test;
+
       void fail();
       void pass();
       void flip();
 
+      Ui::MainWindow* ui = nullptr;
+      Test _test;
       bool _flipped = false;
       std::array<int32_t, 2> _mouse_pos;
 };
