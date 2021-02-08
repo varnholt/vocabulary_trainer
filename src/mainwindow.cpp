@@ -3,97 +3,10 @@
 
 #include <QDir>
 #include <QKeyEvent>
+#include <QSettings>
 
+#include <iostream>
 
-namespace
-{
-
-constexpr auto title_label_css = R"(
-   QLabel
-   {
-      color: #cccccc;
-      background-color: #333333;
-   }
-)";
-
-constexpr auto title_buttons_css = R"(
-   QPushButton
-   {
-      color: #ffffff;
-      background-color: #333333;
-      font-weight: normal;
-   }
-
-   QPushButton:hover
-   {
-      background-color: #444444;
-   }
-)";
-
-constexpr auto main_css = R"(
-   QWidget
-   {
-      background-color: #333333;
-   }
-
-   QListWidget
-   {
-      color: #888888;
-   }
-
-   QCheckBox
-   {
-      color: #888888;
-      background-color: #444444;
-      font-weight: bold;
-      border: none;
-      padding: 5px;
-   }
-
-   QCheckBox:active
-   {
-      color: #1d90cd;
-   }
-
-   QCheckBox:hover
-   {
-      background-color: #505050;
-   }
-
-   QLabel
-   {
-      color: #888888;
-      background-color: #444444;
-      font-weight: bold;
-   }
-
-   QLabel:active
-   {
-      color: #1d90cd;
-   }
-
-   QPushButton
-   {
-      color: #888888;
-      background-color: #444444;
-      font-weight: bold;
-      border: none;
-      padding: 5px;
-   }
-
-   QPushButton:active
-   {
-      color: #ffffff;
-   }
-
-   QPushButton:hover
-   {
-      color: #1d90cd;
-      background-color: #505050;
-   }
-)";
-
-}
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
@@ -103,13 +16,29 @@ MainWindow::MainWindow(QWidget *parent)
    ui->statusbar->hide();
    ui->menubar->hide();
 
+   auto file_reader = [](const std::string& filename) -> QString{
+      QFile file(filename.c_str());
+      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+          return "";
+      return file.readAll();
+   };
+
+   const auto title_label_css = file_reader("css/style_title_label.css");
+   const auto title_buttons_css = file_reader("css/style_title_buttons.css");
+
+   std::cout << title_label_css.toStdString() << std::endl;
+
    ui->_title->setStyleSheet(title_label_css);
    ui->_close->setStyleSheet(title_buttons_css);
    ui->_maximize->setStyleSheet(title_buttons_css);
    ui->_minimize->setStyleSheet(title_buttons_css);
-   setStyleSheet(main_css);
+
+   setStyleSheet(file_reader("css/style_main.css"));
 
    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+
+   QSettings settings("settings.ini", QSettings::IniFormat);
+   ui->_flip->setChecked(settings.value("flipped").toBool());
 
    connect(
       ui->_close,
@@ -153,6 +82,16 @@ MainWindow::MainWindow(QWidget *parent)
          _test.load(ui->_files->currentItem()->text().toStdString());
          showNext();
          ui->_stack->setCurrentIndex(0);
+      }
+   );
+
+   connect(
+      ui->_flip,
+      &QCheckBox::stateChanged,
+      this,
+      [this](){
+         QSettings settings("settings.ini", QSettings::IniFormat);
+         settings.setValue("flipped", ui->_flip->isChecked());
       }
    );
 

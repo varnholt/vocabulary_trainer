@@ -1,0 +1,60 @@
+QWidget
+{
+   background-color: #333333;
+}
+
+QListWidget
+{
+   color: #888888;
+}
+
+QCheckBox
+{
+   color: #888888;
+   background-color: #444444;
+   font-weight: bold;
+   border: none;
+   padding: 5px;
+}
+
+QCheckBox:active
+{
+   color: #1d90cd;
+}
+
+QCheckBox:hover
+{
+   background-color: #505050;
+}
+
+QLabel
+{
+   color: #888888;
+   background-color: #444444;
+   font-weight: bold;
+}
+
+QLabel:active
+{
+   color: #1d90cd;
+}
+
+QPushButton
+{
+   color: #888888;
+   background-color: #444444;
+   font-weight: bold;
+   border: none;
+   padding: 5px;
+}
+
+QPushButton:active
+{
+   color: #ffffff;
+}
+
+QPushButton:hover
+{
+   color: #1d90cd;
+   background-color: #505050;
+}
