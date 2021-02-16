@@ -5,7 +5,16 @@
 #include <QKeyEvent>
 #include <QSettings>
 
+#include <algorithm>
 #include <iostream>
+
+
+namespace
+{
+constexpr auto tag_background_color = "background-color";
+constexpr auto tag_color_default = "COLOR_DEFAULT";
+constexpr auto tag_color_hover = "COLOR_HOVER";
+}
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -26,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
    const auto title_label_css = file_reader("css/style_title_label.css");
    const auto title_buttons_css = file_reader("css/style_title_buttons.css");
 
-   std::cout << title_label_css.toStdString() << std::endl;
+   initWordStyle();
 
    ui->_title->setStyleSheet(title_label_css);
    ui->_close->setStyleSheet(title_buttons_css);
@@ -170,8 +179,12 @@ bool MainWindow::eventFilter(QObject* /*obj*/, QEvent *event)
 void MainWindow::showNext()
 {
    _flipped = false;
-   auto nextWord = _test._words[_test._current]._language_1;
-   ui->_word->setText(QString::fromStdString(nextWord).trimmed());
+   const auto next_word = _test._words[_test._current];
+   const auto next_word_lang_1 = next_word._language_1;
+   ui->_word->setText(QString::fromStdString(next_word_lang_1).trimmed());
+
+   // make those words that failed more often more red and angry
+   updateWordStyle(next_word._score);
 }
 
 
@@ -189,6 +202,64 @@ void MainWindow::initMenu()
    {
       ui->_files->setCurrentRow(0);
    }
+}
+
+
+void MainWindow::initWordStyle()
+{
+   QFile file("css/style_word.css");
+   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+   {
+       return;
+   }
+
+   _word_stylesheet =  file.readAll();
+
+   auto word_stylesheet_lines = _word_stylesheet.split("\n");
+
+   auto readColor = [](const QString& line) {
+      QRegularExpression rx("(#.*);");
+      auto i = rx.globalMatch(line);
+      const auto match = i.next();
+      return QColor{match.captured(1)};
+   };
+
+   auto index = 0;
+   for (auto& line : word_stylesheet_lines)
+   {
+      if (line.contains(tag_background_color))
+      {
+         if (index == 0)
+         {
+            _word_color_default = readColor(line);
+            line = QString("%1: %2;").arg(tag_background_color).arg(tag_color_default);
+         }
+         else
+         {
+            _word_color_hover = readColor(line);
+            line = QString("%1: %2;").arg(tag_background_color).arg(tag_color_hover);
+         }
+
+         index++;
+      }
+   }
+
+   _word_stylesheet = word_stylesheet_lines.join("\n");
+}
+
+
+void MainWindow::updateWordStyle(int32_t score)
+{
+   // make bad ones red
+   const auto fail_factor = std::min(std::max(-score, 0) * 0.2f, 1.0f);
+   QColor good_color_default = _word_color_default;
+   QColor good_color_hover = _word_color_hover;
+   good_color_default.setRedF(std::min(1.0f, good_color_default.redF() + fail_factor));
+   good_color_hover.setRedF(std::min(1.0f, good_color_hover.redF() + fail_factor));
+   QString css = _word_stylesheet;
+   css.replace(tag_color_default, good_color_default.name());
+   css.replace(tag_color_hover, good_color_hover.name());
+   ui->_word->setStyleSheet(css);
 }
 
 

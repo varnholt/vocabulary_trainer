@@ -30,6 +30,8 @@ class MainWindow : public QMainWindow
       void showNext();
       void showMenu();
       void initMenu();
+      void initWordStyle();
+      void updateWordStyle(int32_t score);
 
       void fail();
       void pass();
@@ -39,4 +41,8 @@ class MainWindow : public QMainWindow
       Test _test;
       bool _flipped = false;
       std::array<int32_t, 2> _mouse_pos;
+
+      QString _word_stylesheet;
+      QColor _word_color_default;
+      QColor _word_color_hover;
 };
