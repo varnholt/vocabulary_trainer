@@ -251,7 +251,7 @@ void MainWindow::initWordStyle()
 void MainWindow::updateWordStyle(int32_t score)
 {
    // make bad ones red
-   const auto fail_factor = std::min(std::max(-score, 0) * 0.2f, 1.0f);
+   const auto fail_factor = std::min(std::max(-score, 0) * 0.1f, 1.0f);
    QColor good_color_default = _word_color_default;
    QColor good_color_hover = _word_color_hover;
    good_color_default.setRedF(std::min(1.0f, good_color_default.redF() + fail_factor));
