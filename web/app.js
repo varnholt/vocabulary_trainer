@@ -134,7 +134,8 @@ function renderCard() {
   $("progress").max = api.total();
   $("progress").value = learned;
   $("progress-text").textContent = `${learned} of ${api.total()} words learned`;
-  $("attempts").textContent = `${api.attempts()} ${api.attempts() === 1 ? "answer" : "answers"}`;
+  $("attempts").textContent =
+    `${api.attempts()} ${api.attempts() === 1 ? "answer" : "answers"}`;
 }
 
 function flip() {
@@ -248,8 +249,22 @@ document.addEventListener("keydown", (event) => {
 window.Module = {
   onRuntimeInitialized() {
     const wrap = (name, result, args = []) => Module.cwrap(name, result, args);
+    const allocate = wrap("allocate_input", "number", ["number"]);
+    const release = wrap("release_input", null, ["number"]);
+    const load = wrap("load_list", "number", ["number", "number"]);
     api = {
-      load: wrap("load_list", "number", ["string", "number"]),
+      load(csv, reverse) {
+        // cwrap string arguments use the small Wasm stack. Import on the heap.
+        const size = new TextEncoder().encode(csv).length + 1;
+        const pointer = allocate(size);
+        if (!pointer) throw new Error("This list is too large to load.");
+        try {
+          Module.stringToUTF8(csv, pointer, size);
+          return load(pointer, reverse);
+        } finally {
+          release(pointer);
+        }
+      },
       error: wrap("last_error", "string"),
       front: wrap("card_front", "string"),
       back: wrap("card_back", "string"),

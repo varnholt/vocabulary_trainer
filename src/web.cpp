@@ -1,4 +1,5 @@
 #include "training.h"
+#include <cstdlib>
 #include <emscripten/emscripten.h>
 #include <string>
 
@@ -10,6 +11,11 @@ std::string error;
 
 extern "C"
 {
+    EMSCRIPTEN_KEEPALIVE void *allocate_input(int size)
+    {
+        return size > 0 && size <= 5 * 1024 * 1024 + 1 ? std::malloc(size) : nullptr;
+    }
+    EMSCRIPTEN_KEEPALIVE void release_input(void *input) { std::free(input); }
     EMSCRIPTEN_KEEPALIVE int load_list(const char *csv, int reverse)
     {
         auto result = vocab::parse(csv);

@@ -25,7 +25,7 @@ if(EMSCRIPTEN)
                                        "${CMAKE_BINARY_DIR}/web")
   target_link_options(
     vocabulary PRIVATE -sALLOW_MEMORY_GROWTH=1 -sENVIRONMENT=web -sFILESYSTEM=0
-    "-sEXPORTED_RUNTIME_METHODS=['cwrap']")
+    "-sEXPORTED_RUNTIME_METHODS=['cwrap','stringToUTF8']")
   add_custom_target(
     web_assets ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/web"

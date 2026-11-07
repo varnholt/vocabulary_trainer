@@ -91,6 +91,10 @@ try:
         page.locator("#card").click()
         page.locator("#known").click()
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        page.locator("#back").click()
+        page.locator("#file").set_input_files({"name": "Large list.csv", "mimeType": "text/csv", "buffer": b"word;answer\n" * 10000})
+        page.locator(".list-start").last.click()
+        expect(page.locator("#progress-text")).to_have_text("0 of 10000 words learned")
         assert not errors, errors
         browser.close()
         print("Browser workflows passed: samples, imports, reverse, scoring, storage, keyboard, safe text and mobile layout")
