@@ -1,0 +1,10 @@
+name: Feature request
+description: Suggest a useful improvement to the trainer.
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What would help you practice?
+      description: Describe the situation and the behavior you would like.
+    validations:
+      required: true
