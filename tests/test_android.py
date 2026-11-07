@@ -30,7 +30,7 @@ try:
         raise AssertionError("The app did not start its debug WebView")
     command("forward", "tcp:9223", f"localabstract:webview_devtools_remote_{pid}")
     with sync_playwright() as playwright:
-        browser = playwright.chromium.connect_over_cdp("http://127.0.0.1:9223")
+        browser = playwright.chromium.connect_over_cdp("http://127.0.0.1:9223", no_defaults=True)
         page = browser.contexts[0].pages[0]
         page.wait_for_selector('html[data-ready="true"]', timeout=30000)
         expect(page.locator(".list-start")).to_have_count(7)
