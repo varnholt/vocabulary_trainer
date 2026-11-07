@@ -1,0 +1,26 @@
+plugins { id 'com.android.application' }
+
+def webRoot = file('../../build-web/web')
+if (!new File(webRoot, 'vocabulary.wasm').exists()) {
+    throw new GradleException('Build the WebAssembly app in build-web first. See README.md.')
+}
+android {
+    namespace 'com.varnholt.vocabulary'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'com.varnholt.vocabulary'
+        minSdk 26
+        targetSdk 36
+        versionCode 20000
+        versionName '2.0.0'
+    }
+    sourceSets { main { assets.srcDirs = [webRoot] } }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+dependencies {
+    implementation 'androidx.activity:activity:1.11.0'
+    implementation 'androidx.webkit:webkit:1.14.0'
+}

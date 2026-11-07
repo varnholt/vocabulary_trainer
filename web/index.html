@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A quiet place to practice vocabulary. Bring a CSV list, flip a card, and keep learning. Runs locally in your browser."
+    />
+    <meta name="theme-color" content="#f5f2eb" />
+    <title>All the Vocabulary — a little practice, every day</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <a class="brand" href="./" aria-label="All the Vocabulary home"
+          ><span class="mark" aria-hidden="true">a<span>å</span></span
+          >all the vocabulary<span class="brand-dot">.</span></a
+        ><span class="edition">A LITTLE PRACTICE, EVERY DAY</span>
+      </header>
+      <main>
+        <p id="status" class="notice" role="status">
+          Warming up the practice engine…
+        </p>
+        <section id="library" aria-labelledby="library-title">
+          <div class="intro">
+            <p class="eyebrow">YOUR WORDS. YOUR PACE.</p>
+            <h1 id="library-title">
+              Make room for<br />another <em>language.</em>
+            </h1>
+            <p class="lede">
+              A few words at a time. Bring your own vocabulary list, or start
+              with a little Danish.
+            </p>
+          </div>
+          <div class="library-grid">
+            <section class="panel" aria-labelledby="lists-title">
+              <div class="panel-heading">
+                <h2 id="lists-title">Your practice shelf</h2>
+                <span id="list-count" class="muted"></span>
+              </div>
+              <div id="lists"></div>
+              <label class="reverse"
+                ><input id="reverse" type="checkbox" /> Reverse the translation
+                direction</label
+              >
+              <p class="small muted">
+                Lists and preferences stay in this browser. Practice scores
+                reset each session.
+              </p>
+            </section>
+            <section class="panel import-panel" aria-labelledby="import-title">
+              <span class="label-number">01 / BRING YOUR WORDS</span>
+              <h2 id="import-title">Start with a list.</h2>
+              <p>
+                Choose a UTF-8 CSV file. Keep one vocabulary pair per line,
+                separated by a semicolon, comma, or pipe.
+              </p>
+              <label class="upload" for="file"
+                >Choose a CSV file <span aria-hidden="true">↗</span></label
+              ><input id="file" type="file" accept=".csv,text/csv,text/plain" />
+              <details>
+                <summary>Or paste your vocabulary</summary>
+                <label for="list-name">List name</label
+                ><input
+                  id="list-name"
+                  maxlength="80"
+                  placeholder="My new words"
+                /><label for="csv">Vocabulary pairs</label
+                ><textarea
+                  id="csv"
+                  rows="5"
+                  placeholder="hej;hello&#10;tak;thank you"
+                  spellcheck="false"
+                ></textarea
+                ><button id="add-paste" class="primary" disabled>
+                  Add to shelf
+                </button>
+              </details>
+              <p class="small muted">
+                No account. No uploads. Your vocabulary stays on your device.
+                Maximum 5 MiB per list.
+              </p>
+            </section>
+          </div>
+        </section>
+        <section id="practice" hidden aria-labelledby="session-title">
+          <div class="session-heading">
+            <button id="back" class="quiet">← Your shelf</button
+            ><span id="session-title"></span>
+          </div>
+          <div class="progress-label">
+            <span id="progress-text"></span><span id="attempts"></span>
+          </div>
+          <progress
+            id="progress"
+            value="0"
+            max="1"
+            aria-label="Words learned"
+          ></progress>
+          <p id="card-side" class="eyebrow card-side">TAKE YOUR TIME</p>
+          <button id="card" class="card" aria-describedby="card-hint">
+            <span id="card-text" aria-live="polite"></span
+            ><span id="card-hint">Think of the answer. Tap to reveal.</span>
+          </button>
+          <div class="answer-actions">
+            <button id="again" class="secondary" disabled>
+              Practice again <kbd>←</kbd></button
+            ><button id="known" class="primary" disabled>
+              I knew it <kbd>→</kbd>
+            </button>
+          </div>
+          <p class="keyboard-hint">
+            Tap the card or press <kbd>Space</kbd> to flip ·
+            <kbd>Esc</kbd> returns to your shelf
+          </p>
+        </section>
+        <section
+          id="complete"
+          class="completion"
+          hidden
+          aria-labelledby="complete-title"
+        >
+          <span class="completion-symbol" aria-hidden="true">✓</span>
+          <p class="eyebrow">A LITTLE MORE FAMILIAR</p>
+          <h1 id="complete-title">Nicely done.</h1>
+          <p id="summary" class="lede"></p>
+          <button id="restart" class="primary">Practice this list again</button
+          ><button id="finish" class="quiet">Back to your shelf →</button>
+        </section>
+        <noscript
+          >This trainer needs JavaScript and WebAssembly. Your vocabulary is
+          processed locally.</noscript
+        >
+      </main>
+      <footer>
+        <span>Small steps. More words.</span
+        ><a href="https://github.com/varnholt/vocabulary_trainer"
+          >Source &amp; CSV guide ↗</a
+        >
+      </footer>
+    </div>
+  </body>
+</html>
