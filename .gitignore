@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+# Local builds and editor settings
+/build*/
+/artifacts/
+/.vs/
+/.vscode/
+*.user
+settings.ini
+__pycache__/
+/tests/screenshots/
+/android/.gradle/
+/android/.kotlin/
+/android/local.properties
+/android/**/build/
+/emsdk-cache/
