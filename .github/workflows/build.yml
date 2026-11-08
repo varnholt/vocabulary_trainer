@@ -76,7 +76,16 @@ jobs:
       - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
       - name: Build and lint
         working-directory: android
-        run: bash ./gradlew --no-daemon assembleDebug lintDebug
+        run: |
+          # Avoid the distribution service's failing cached redirect in CI.
+          # Keep the checked-in URL standard for Dependabot checksum updates.
+          properties=gradle/wrapper/gradle-wrapper.properties
+          cp "$properties" "$RUNNER_TEMP/gradle-wrapper.properties"
+          trap 'cp "$RUNNER_TEMP/gradle-wrapper.properties" "$properties"' EXIT
+          version=$(sed -n 's/^distributionUrl=.*gradle-\([0-9.]*\)-bin.zip$/\1/p' "$properties")
+          test -n "$version"
+          sed -i "s|^distributionUrl=.*|distributionUrl=https://github.com/gradle/gradle-distributions/releases/download/v$version/gradle-$version-bin.zip?download=1|" "$properties"
+          bash ./gradlew --no-daemon assembleDebug lintDebug
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"

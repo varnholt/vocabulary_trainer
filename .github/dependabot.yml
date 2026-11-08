@@ -12,3 +12,8 @@ updates:
     directory: /android
     schedule:
       interval: monthly
+    groups:
+      android-toolchain:
+        patterns:
+          - "com.android.application"
+          - "gradle-wrapper"
